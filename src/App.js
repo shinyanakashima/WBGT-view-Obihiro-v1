@@ -36,17 +36,20 @@ function App() {
         setMaxValue(maxValue);
 
         if (maxValue >= 31) {
-          setBgColor('red');
+          setBgColor('#ff2800');
           setWgbtLevel("危険");
         } else if (maxValue >= 28) {
-          setBgColor('orange');
+          setBgColor('#ff9600');
           setWgbtLevel("厳重警戒");
         } else if (maxValue >= 25) {
-          setBgColor('yellow');
+          setBgColor('#faf500');
           setWgbtLevel("警戒");
-        } else {
-          setBgColor('#A0D2FF');
+        } else if (maxValue >= 21) {
+          setBgColor('#a0d2ff');
           setWgbtLevel("注意");
+        } else {
+          setBgColor('#218cff');
+          setWgbtLevel("ほぼ安全");
         }
       } catch (err) {
         console.error('Error: ', err);

@@ -2,7 +2,7 @@
   "name": "nechusho-alert",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/Lab/Kenkyujo/Dashboard/src/nechusho-alert/build",
+  "homepage": "/Lab/Kenkyujo/Dashboard/wbgt/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "postbuild": "rsync -av --delete build/ /home/c7901751/public_html/zksdx.org/Lab/Kenkyujo/Dashboard/wgbt/",
+    "postbuild": "rsync -av --delete build/ /home/c7901751/public_html/zksdx.org/Lab/Kenkyujo/Dashboard/wbgt/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
