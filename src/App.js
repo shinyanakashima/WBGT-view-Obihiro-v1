@@ -64,7 +64,7 @@ function App() {
       <main className="App-main">
         {maxValue !== null && maxKey !== null && (
           <section>
-            <div classNmae="App-main-example">{maxKey}時頃に</div>
+            <div className="App-main-example">{maxKey}時頃に</div>
             <div className="App-main-caution">
               <p> {wgbtLevel} : {maxValue} ℃</p>
             </div>
