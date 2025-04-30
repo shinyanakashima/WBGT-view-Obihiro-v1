@@ -7,21 +7,24 @@ function App() {
   const [maxKey, setMaxKey] = useState(null);
   const [maxValue, setMaxValue] = useState(null);
   const [wgbtLevel, setWgbtLevel] = useState("Loading...");
-  const dateKey = new Date().toLocaleDateString("ja-JP", {
-    year: "numeric", month: "2-digit",
-    day: "2-digit"
-  }).replaceAll('/', '');
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // APIから全データ取得
         const resp = await axios.get("https://6ealbffjxfgzo4r3kuiac7txry0bnwbm.lambda-url.us-east-1.on.aws/");
-        const respData = resp.data;
-        const todayData = respData[dateKey];
-        console.log(todayData);
 
-        // 最大値とそのキーを取得する
+        // 現在日付をキーとして使用
+        const dateKey = new Date().toLocaleDateString("ja-JP", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit"
+        }).replaceAll('/', '');
+
+        const todayData = resp.data[dateKey];
+        if (!todayData) return;
+
+        // 最大値とそのキーを計算
         const { maxKey, maxValue } = Object.entries(todayData).reduce((acc, [key, value]) => {
           if (value > acc.maxValue) {
             return { maxKey: key, maxValue: value };
@@ -29,32 +32,34 @@ function App() {
           return acc;
         }, { maxKey: null, maxValue: -Infinity });
 
-        console.log(`最大WGBT: ${maxValue}`);
-        console.log(`最大値の時間キー: ${maxKey}`);
-        // 状態を更新する
+        // ステート更新（→ Reactが1回だけ再描画）
         setMaxKey(maxKey);
         setMaxValue(maxValue);
 
         if (maxValue >= 31) {
-          setBgColor('red');
+          setBgColor('#ff2800');       // 赤
           setWgbtLevel("危険");
         } else if (maxValue >= 28) {
-          setBgColor('orange');
+          setBgColor('#ff9600');       // 橙
           setWgbtLevel("厳重警戒");
         } else if (maxValue >= 25) {
-          setBgColor('yellow');
+          setBgColor('#faf500');       // 黄
           setWgbtLevel("警戒");
         } else {
-          setBgColor('#A0D2FF');
+          setBgColor('#a0d2ff');       // 青
           setWgbtLevel("注意");
         }
       } catch (err) {
-        console.error('Error: ', err);
+        console.error('Error fetching data:', err);
       }
     };
-    fetchData();
-  }, []);
 
+    fetchData(); // 初回実行
+
+    const timerId = setInterval(fetchData, 60000); // 60秒おきに実行
+
+    return () => clearInterval(timerId); // クリーンアップ（アンマウント時）
+  }, []); // 依存なし：初回マウント時のみ useEffect 実行
 
   return (
     <div className="App" style={{ backgroundColor: bgcolor }}>
